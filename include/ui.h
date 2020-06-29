@@ -86,6 +86,8 @@ Position newPosition(int x,int y);
 
 
 
-
+// Color red = 0x00ff0000;
+// Color blue = 0x000000ff;
+// Color green = 0x0000ff00;
 
 #endif

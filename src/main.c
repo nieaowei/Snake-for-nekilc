@@ -22,6 +22,9 @@
 
 #include <stddef.h>
 #include "lcd.h"
+#include <stdio.h>
+#include "mainUI.h"
+
 
 
  int main(void)
@@ -32,9 +35,24 @@
 
 	Size size = newSize(800,480);
 	LCD lcd = newLCD(red,size);
-	Block block = newBlock(newBorder(DOTTED,blue,newPadding(10,10,10,10)),green,size);
-	drawBlock(lcd,newPosition(0,0),block);
+	Block SolidBlockEQ = newBlock(NULL,green,size);
+	// Block SolidBlockNEQ = newBlock(newBorder(SOLID,blue,newPadding(10,30,10,20)),green,size);
+	// Block DottedBlockEQ = newBlock(newBorder(DOTTED,blue,newPadding(10,10,10,10)),green,size);
+	// Block DottedBlockNEQ = newBlock(newBorder(DOTTED,blue,newPadding(10,30,10,10)),green,size);
+	// Block blocks[4]={SolidBlockEQ,SolidBlockNEQ,DottedBlockEQ,DottedBlockNEQ};
+	drawBlock(lcd,newPosition(0,0),SolidBlockEQ);
+	
+	paintMainUI(lcd);
 
+	int i = 0;
+
+	while (1)
+	{
+		// drawBlock(lcd,newPosition(0,0),blocks[i++]);
+		sleep(1);
+		i=i%4;
+	}
+	
 	return 0;
  }
 

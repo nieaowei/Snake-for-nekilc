@@ -30,6 +30,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
+#include "core.h"
 
 // internal function.
 void drawPoint(LCD lcd,int x,int y,Color color){
@@ -49,6 +50,16 @@ void drawBlock(LCD lcd,Position position,Block block){
     int right=1;
     int rightCount=__INT32_MAX__;
     bool rightFlag = false;
+
+    char msg[256];
+
+    if (end->x> lcd->size->width || end->y > lcd->size->height)
+    {
+        sprintf(msg,"faild,cause by size beyond lcd size. end Position(%d,%d),LCD->size(%d,%d)",end->x,end->y,lcd->size->width,lcd->size->height);
+        logD("LCD","drawBlock",msg,400);
+        return ;
+    }
+    
 
     for (; start->y < end->y; start->y++)
     {
@@ -197,13 +208,15 @@ LCD newLCD(Color color,Size size){
 		perror("open");
 		exit(1);
 	}
+    logD("LCD","newLCD","open lcd ok.",200);
 
-	lcd->address = (unsigned int *)mmap(NULL, 800*480*4, PROT_READ|PROT_WRITE, MAP_SHARED, fd,  0);
+	lcd->address = (unsigned int *)mmap(NULL, lcd->size->width*lcd->size->height*4, PROT_READ|PROT_WRITE, MAP_SHARED, fd,  0);
 	if(MAP_FAILED == lcd->address)
 	{
 		perror("mmap");
 		exit(1);
 	}
+    logD("LCD","newLCD","mmap lcd ok.",200);
     
     drawBlock(lcd,newPosition(0,0),newBlock(NULL,color,newSize(lcd->size->width,lcd->size->height)));
     
