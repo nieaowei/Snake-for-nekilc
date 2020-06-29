@@ -24,6 +24,7 @@ ScreenSetting newScreenSetting(Block background,Position position,int size){
     Position end = newPosition(background->size->width+position->x,background->size->height+position->y);
     int temp = 0;
     //如果有边框，去除边框
+    s->background=background;
     if (background->border!=NULL)
     {
         start->x = start->x + background->border->padding->left;

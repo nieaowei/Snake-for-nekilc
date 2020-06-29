@@ -23,7 +23,8 @@
 #include <stddef.h>
 #include "lcd.h"
 #include <stdio.h>
-#include "mainUI.h"
+#include "home.h"
+#include "game.h"
 
 
 
@@ -37,9 +38,15 @@
 	Block DottedBlockEQ = newBlock(newBorder(newBorderType(DOTTED,4),blue,newPadding(10,10,10,10)),purple,size);
 	// Block DottedBlockNEQ = newBlock(newBorder(DOTTED,blue,newPadding(10,30,10,10)),green,size);
 	// Block blocks[4]={SolidBlockEQ,SolidBlockNEQ,DottedBlockEQ,DottedBlockNEQ};
+	Block gameScreen = newBlock(newBorder(newBorderType(SOLID,3),red,newPadding(10,10,10,10)),green,newSize(600,450));
+	
+	ScreenSetting screenSetting = newScreenSetting(gameScreen,newPosition(15,15),10);
+	
 	drawBlock(lcd,newPosition(0,0),DottedBlockEQ);
 	
-	paintMainUI(lcd);
+	drawGameScreen(lcd,screenSetting);
+	
+	// paintMainUI(lcd);
 
 	int i = 0;
 

@@ -53,6 +53,11 @@ void drawBlock(LCD lcd,Position position,Block block){
 
     char msg[256];
 
+    // memset(msg,0,256);
+
+    sprintf(msg,"end Position(%d,%d),LCD->size(%d,%d),BlockSize(%d,%d)",end->x,end->y,lcd->size->width,lcd->size->height,block->size->width,block->size->height);
+    logD("LCD","drawBlock",msg,200);
+
     if (end->x> lcd->size->width || end->y > lcd->size->height)
     {
         sprintf(msg,"faild,cause by size beyond lcd size. end Position(%d,%d),LCD->size(%d,%d)",end->x,end->y,lcd->size->width,lcd->size->height);

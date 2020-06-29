@@ -19,6 +19,6 @@
 
 void logD(const char *tag,const char *funcName,const char *msg,const int code){
     char str[256];
-    sprintf(str,"[%s][%s][%d]\t%s\t",tag,funcName,code,msg);
+    sprintf(str,"[%s][%s]\t\t\t[%d]\t\t%s\t\t\t\t",tag,funcName,code,msg);
     perror(str);
 }
