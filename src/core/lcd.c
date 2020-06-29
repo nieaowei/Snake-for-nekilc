@@ -63,7 +63,7 @@ void drawBlock(LCD lcd,Position position,Block block){
 
     for (; start->y < end->y; start->y++)
     {
-        if (block->border!=NULL && block->border->type==DOTTED)
+        if (block->border!=NULL && block->border->borderType->type==DOTTED)
         {
             top = 1;
             topCount=__INT32_MAX__;
@@ -78,15 +78,15 @@ void drawBlock(LCD lcd,Position position,Block block){
             {
                     if (start->y < position->y+block->border->padding->top)
                     {
-                        if (block->border->type==DOTTED)
+                        if (block->border->borderType->type==DOTTED)
                         {
-                            if ((start->x+1)%(block->border->padding->top*top+1)==0)
+                            if ((start->x+1)%(block->border->padding->top+block->border->borderType->spacing+1)==0)
                             {
                                 top+=2;
                                 topCount = 1;
                                 drawPoint(lcd,start->x,start->y,block->color);
                                 continue;
-                            }else if (topCount < block->border->padding->top)
+                            }else if (topCount < block->border->borderType->spacing)
                             {
                                 topCount++;
                                 drawPoint(lcd,start->x,start->y,block->color);
@@ -100,15 +100,15 @@ void drawBlock(LCD lcd,Position position,Block block){
                     
                     if (start->y > end->y - block->border->padding->bottom - 1)
                     {
-                        if (block->border->type==DOTTED)
+                        if (block->border->borderType->type==DOTTED)
                         {
-                            if ((start->x+1)%(block->border->padding->bottom*bottom+1)==0)
+                            if ((start->x+1)%(block->border->padding->bottom+block->border->borderType->spacing+1)==0)
                             {
                                 bottom+=2;
                                 bottomCount = 1;
                                 drawPoint(lcd,start->x,start->y,block->color);
                                 continue;
-                            }else if (bottomCount < block->border->padding->top)
+                            }else if (bottomCount < block->border->borderType->spacing)
                             {
                                 bottomCount++;
                                 drawPoint(lcd,start->x,start->y,block->color);
@@ -123,10 +123,10 @@ void drawBlock(LCD lcd,Position position,Block block){
                 
                     if (start->x < position->x + block->border->padding->left)
                     {
-                        if (block->border->type==DOTTED)
+                        if (block->border->borderType->type==DOTTED)
                         {
                             
-                            if ((start->y+1)%(block->border->padding->left*left+1)==0)
+                            if ((start->y+1)%(block->border->borderType->spacing+block->border->padding->left+1)==0)
                             {
                                 leftFlag = true;
                                 leftCount = 0;
@@ -146,10 +146,10 @@ void drawBlock(LCD lcd,Position position,Block block){
                 
                     if (start->x > end->x - block->border->padding->right - 1)
                     {
-                        if (block->border->type==DOTTED)
+                        if (block->border->borderType->type==DOTTED)
                         {
                             
-                            if ((start->y+1)%(block->border->padding->right*right+1)==0)
+                            if ((start->y+1)%(block->border->borderType->spacing+block->border->padding->right+1)==0)
                             {
                                 rightFlag = true;
                                 rightCount = 0;
@@ -174,7 +174,7 @@ void drawBlock(LCD lcd,Position position,Block block){
         if (leftFlag)
         {
             leftCount++;
-            if (leftCount==block->border->padding->left)
+            if (leftCount==block->border->borderType->spacing)
             {
                 left+=2;        
                 leftFlag=false;
@@ -184,7 +184,7 @@ void drawBlock(LCD lcd,Position position,Block block){
         if (rightFlag)
         {
             rightCount++;
-            if (rightCount==block->border->padding->right)
+            if (rightCount==block->border->borderType->spacing)
             {
                 right+=2;        
                 rightFlag=false;

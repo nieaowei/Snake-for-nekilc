@@ -31,7 +31,7 @@ typedef int bool;
 typedef enum{
     SOLID=0,
     DOTTED
-}BorderType;
+}BORDER_TYPE;
 
 typedef struct
 {
@@ -46,14 +46,22 @@ Padding newPadding(px top,px bottom,px left,px right);
 
 typedef struct 
 {
-    BorderType type;
+    BORDER_TYPE type;
+    px spacing;
+
+}BorderTypeInfo,*BorderType;
+
+BorderType newBorderType(BORDER_TYPE type,px spacing);
+
+typedef struct 
+{
+    BorderType borderType;
     Color color;
     Padding padding;
 
-
 }boderInfo,*Border;
 
-Border newBorder(BorderType type,Color color,Padding padding);
+Border newBorder(BorderType borderType,Color color,Padding padding);
 
 
 typedef struct 
@@ -86,8 +94,16 @@ Position newPosition(int x,int y);
 
 
 
-// Color red = 0x00ff0000;
-// Color blue = 0x000000ff;
-// Color green = 0x0000ff00;
+extern Color red;
+extern Color blue;
+extern Color green;
+extern Color yellow;
+extern Color gray;
+extern Color brown;
+extern Color orange;
+extern Color white;
+extern Color black;
+extern Color purple;
+extern Color clear;
 
 #endif

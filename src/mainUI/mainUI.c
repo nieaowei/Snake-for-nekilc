@@ -17,13 +17,10 @@
 #include "mainUI.h"
 
 void paintMainUI(LCD lcd){
-	Color red = 0x00ff0000;
-	Color blue = 0x000000ff;
-	Color green = 0x0000ff00;
-    Block block = newBlock(newBorder(SOLID,red,newPadding(0,5,0,5)),blue,newSize(50,50));
+    Block block = newBlock(newBorder(newBorderType(SOLID,0),orange,newPadding(1,5,1,5)),yellow,newSize(50,50));
     for (int i = 0; i < 3; i++)
     {
-        drawBlock(lcd,newPosition(i*50,i*50),block);
+        drawBlock(lcd,newPosition(i*50+10,i*50+10),block);
 
     }
     
