@@ -45,16 +45,22 @@ void drawBlock(LCD lcd,Position position,Block block){
     int bottomCount=0;
     int left=1;
     int leftCount=__INT32_MAX__;
-    int leftYCount = __INT32_MAX__;
+    bool leftFlag = false;
     int right=1;
     int rightCount=__INT32_MAX__;
+    bool rightFlag = false;
+
     for (; start->y < end->y; start->y++)
     {
-        top = 1;
-        topCount=__INT32_MAX__;
-        bottom = 1;
-        bottomCount=__INT32_MAX__;
-        leftCount=__INT32_MAX__;
+        if (block->border!=NULL && block->border->type==DOTTED)
+        {
+            top = 1;
+            topCount=__INT32_MAX__;
+            bottom = 1;
+            bottomCount=__INT32_MAX__;
+        }
+        
+        
         for (start->x = position->x ;start->x < end->x; start->x++)
         {
             if (block->border!=NULL)
@@ -108,27 +114,19 @@ void drawBlock(LCD lcd,Position position,Block block){
                     {
                         if (block->border->type==DOTTED)
                         {
+                            
                             if ((start->y+1)%(block->border->padding->left*left+1)==0)
                             {
-                                left+=2;
-                                leftCount = 1;
+                                leftFlag = true;
+                                leftCount = 0;
                                 drawPoint(lcd,start->x,start->y,block->color);
                                 continue;
-                            }else if(leftYCount<block->border->padding->left){
-                                drawPoint(lcd,start->x,start->y,block->color);
-                                continue;
-                            }
-                            else if (leftCount < block->border->padding->left)
+                            }else if (leftFlag)
                             {
-                                leftCount++;
                                 drawPoint(lcd,start->x,start->y,block->color);
-                                if (leftCount==block->border->padding->left)
-                                {
-                                    leftYCount=1;
-                                }
-                                
                                 continue;
                             }
+                            
                         }
                         drawPoint(lcd,start->x,start->y,block->border->color);
                         continue;
@@ -139,19 +137,19 @@ void drawBlock(LCD lcd,Position position,Block block){
                     {
                         if (block->border->type==DOTTED)
                         {
+                            
                             if ((start->y+1)%(block->border->padding->right*right+1)==0)
                             {
-                                right+=2;
-                                rightCount = 1;
+                                rightFlag = true;
+                                rightCount = 0;
                                 drawPoint(lcd,start->x,start->y,block->color);
                                 continue;
-                            }else if (rightCount < block->border->padding->right)
+                            }else if (rightFlag)
                             {
-                                rightCount++;
                                 drawPoint(lcd,start->x,start->y,block->color);
                                 continue;
                             }
-                        
+                            
                         }
                         drawPoint(lcd,start->x,start->y,block->border->color);
                         continue;
@@ -162,6 +160,28 @@ void drawBlock(LCD lcd,Position position,Block block){
     
             
         }
+        if (leftFlag)
+        {
+            leftCount++;
+            if (leftCount==block->border->padding->left)
+            {
+                left+=2;        
+                leftFlag=false;
+            }
+            
+        }
+        if (rightFlag)
+        {
+            rightCount++;
+            if (rightCount==block->border->padding->right)
+            {
+                right+=2;        
+                rightFlag=false;
+            }
+            
+        }
+        
+
     }
     
 }
