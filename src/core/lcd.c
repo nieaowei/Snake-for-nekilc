@@ -18,6 +18,8 @@
  * 2020-06-29 6:54:26	Neklic	add drawBlock function.
  * 
  * 2020-06-29 7:09:12	Neklic	add newPadding function.
+ * 
+ * 2020-06-29 7:47:07	Neklic	modify newBorder function.
  */
 #include "lcd.h"
 #include <stdlib.h>
@@ -37,20 +39,66 @@ void drawPoint(LCD lcd,int x,int y,Color color){
 void drawBlock(LCD lcd,Position position,Block block){
     Position start = newPosition(position->x,position->y);
     Position end = newPosition(position->x+block->size->width,position->y+block->size->height);
+    int top=1;
+    int topCount=0;
+    int bottom=1;
+    int bottomCount=0;
+    int left=1;
+    int leftCount=__INT32_MAX__;
+    int leftYCount = __INT32_MAX__;
+    int right=1;
+    int rightCount=__INT32_MAX__;
     for (; start->y < end->y; start->y++)
     {
+        top = 1;
+        topCount=__INT32_MAX__;
+        bottom = 1;
+        bottomCount=__INT32_MAX__;
+        leftCount=__INT32_MAX__;
         for (start->x = position->x ;start->x < end->x; start->x++)
         {
             if (block->border!=NULL)
             {
                     if (start->y < position->y+block->border->padding->top)
                     {
+                        if (block->border->type==DOTTED)
+                        {
+                            if ((start->x+1)%(block->border->padding->top*top+1)==0)
+                            {
+                                top+=2;
+                                topCount = 1;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }else if (topCount < block->border->padding->top)
+                            {
+                                topCount++;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }
+                        
+                        }
                         drawPoint(lcd,start->x,start->y,block->border->color);
                         continue;
                     }
                     
                     if (start->y > end->y - block->border->padding->bottom - 1)
                     {
+                        if (block->border->type==DOTTED)
+                        {
+                            if ((start->x+1)%(block->border->padding->bottom*bottom+1)==0)
+                            {
+                                bottom+=2;
+                                bottomCount = 1;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }else if (bottomCount < block->border->padding->top)
+                            {
+                                bottomCount++;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }
+                        
+                        }
                         drawPoint(lcd,start->x,start->y,block->border->color);
                         continue;
                     }
@@ -58,6 +106,30 @@ void drawBlock(LCD lcd,Position position,Block block){
                 
                     if (start->x < position->x + block->border->padding->left)
                     {
+                        if (block->border->type==DOTTED)
+                        {
+                            if ((start->y+1)%(block->border->padding->left*left+1)==0)
+                            {
+                                left+=2;
+                                leftCount = 1;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }else if(leftYCount<block->border->padding->left){
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }
+                            else if (leftCount < block->border->padding->left)
+                            {
+                                leftCount++;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                if (leftCount==block->border->padding->left)
+                                {
+                                    leftYCount=1;
+                                }
+                                
+                                continue;
+                            }
+                        }
                         drawPoint(lcd,start->x,start->y,block->border->color);
                         continue;
                     }
@@ -65,6 +137,22 @@ void drawBlock(LCD lcd,Position position,Block block){
                 
                     if (start->x > end->x - block->border->padding->right - 1)
                     {
+                        if (block->border->type==DOTTED)
+                        {
+                            if ((start->y+1)%(block->border->padding->right*right+1)==0)
+                            {
+                                right+=2;
+                                rightCount = 1;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }else if (rightCount < block->border->padding->right)
+                            {
+                                rightCount++;
+                                drawPoint(lcd,start->x,start->y,block->color);
+                                continue;
+                            }
+                        
+                        }
                         drawPoint(lcd,start->x,start->y,block->border->color);
                         continue;
                     }

@@ -33,8 +33,9 @@ Padding newPadding(px top,px bottom,px left,px right){
     return p;
 }
 
-Border newBorder(Color color,px width,Padding padding){
+Border newBorder(BorderType type,Color color,Padding padding){
     Border b = (Border)malloc(sizeof(boderInfo));
+    b->type = type;
     b->color = color;
     b->padding = padding;
     return b;

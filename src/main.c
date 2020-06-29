@@ -28,10 +28,11 @@
  {	
 	Color red = 0x00ff0000;
 	Color blue = 0x000000ff;
+	Color green = 0x0000ff00;
 
 	Size size = newSize(800,480);
-	LCD lcd = newLCD(blue,size);
-	Block block = newBlock(newBorder(blue,5,newPadding(2,2,2,2)),red,size);
+	LCD lcd = newLCD(red,size);
+	Block block = newBlock(newBorder(DOTTED,blue,newPadding(10,10,10,10)),green,size);
 	drawBlock(lcd,newPosition(0,0),block);
 
 	return 0;

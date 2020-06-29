@@ -28,6 +28,11 @@ typedef int px;
 typedef __UINT32_TYPE__ Color;
 typedef int bool;
 
+typedef enum{
+    SOLID=0,
+    DOTTED
+}BorderType;
+
 typedef struct
 {
     px top;
@@ -41,12 +46,14 @@ Padding newPadding(px top,px bottom,px left,px right);
 
 typedef struct 
 {
+    BorderType type;
     Color color;
     Padding padding;
 
+
 }boderInfo,*Border;
 
-Border newBorder(Color color,px width,Padding padding);
+Border newBorder(BorderType type,Color color,Padding padding);
 
 
 typedef struct 
