@@ -17,10 +17,18 @@
 
 #include "role.h"
 #include <stdlib.h>
+
 Snake newSnake(Block head,Block body,Position position){
     Snake s = (Snake)malloc(sizeof(snakeInfo));
     s->head = head;
     s->body = body;
     s->position = position;
     return s;
+}
+
+Food newFood(Block block,int life){
+    Food f = (Food)malloc(sizeof(foodInfo));
+    f->block = block;
+    f->life = life;
+    return f;
 }

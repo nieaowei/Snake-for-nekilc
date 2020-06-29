@@ -5,21 +5,18 @@
 #include <stdlib.h>
 
 
-FoodData newFoodData(){
-    FoodData f = (FoodData)malloc(sizeof(foodDataInfo));
-    f->lenth=0;
-    return f;
+void drawGameScreen(LCD lcd ,ScreenSetting screenSetting){
+
+    drawBlock(lcd,screenSetting->position,screenSetting->background);
+
 }
 
-void test(){
-    
-    FoodData f=newFoodData();
-    for (int i = 0; i < f->lenth; i++)
-    {
-        /* code */
-    }
-    
+void addFoodForMap(Food *map,int row,int col){
+
 }
 
+void paintMap(Food food){
+    
+}
 
 

@@ -16,6 +16,7 @@
 
 #include "core.h"
 #include <stdio.h>
+
 void logD(const char *tag,const char *funcName,const char *msg,const int code){
     char str[256];
     sprintf(str,"[%s][%s][%d]\t%s\t",tag,funcName,code,msg);

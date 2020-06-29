@@ -14,8 +14,8 @@
  * --------------------	------	---------------------------------------------------------
  */
 
-#ifndef __MAINUI_H
-#define __MAINUI_H
+#ifndef __HOME_H
+#define __HOME_H
 
 #include "lcd.h"
 

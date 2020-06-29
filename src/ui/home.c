@@ -14,7 +14,7 @@
  * --------------------	------	---------------------------------------------------------
  */
 
-#include "mainUI.h"
+#include "home.h"
 
 void paintMainUI(LCD lcd){
     Block block = newBlock(newBorder(newBorderType(SOLID,0),orange,newPadding(1,5,1,5)),yellow,newSize(50,50));

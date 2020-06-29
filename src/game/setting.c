@@ -17,12 +17,33 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-ScreenSetting newScreenSetting(Block background){
+ScreenSetting newScreenSetting(Block background,Position position,int size){
     ScreenSetting s = (ScreenSetting)malloc(sizeof(screenSetting));
+    //如果没有边框
+    Position start = newPosition(position->x,position->y);
+    Position end = newPosition(background->size->width+position->x,background->size->height+position->y);
+    int temp = 0;
+    //如果有边框，去除边框
     if (background->border!=NULL)
     {
-        s->start = newPosition(background->border->padding->left,background->border->padding->top);
-        s->end = newPosition(background->border->padding->left,background->border->padding->top);
+        start->x = start->x + background->border->padding->left;
+        start->y = start->y + background->border->padding->top;
+        end->x = end->x - background->border->padding->right;
+        end->y = end->y - background->border->padding->bottom;
     }
+    
+    s->position = position;
+    s->range = newPositionRange(start,end);
+    s->size = size;
+    s->row = (end->x-start->x)/size;
+    s->col = (end->y-start->y)/size;
+
+    s->map = (Food *)malloc(sizeof(Food)*s->row);
+    for ( temp = 0; temp < s->row; temp++)
+    {
+        s->map[temp] = (Food)malloc(sizeof(foodInfo)*s->col);
+    }
+
+
     return s;
 }

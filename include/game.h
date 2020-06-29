@@ -1,10 +1,7 @@
 
 #include "role.h"
-
-typedef struct{
-    Food data[256];
-    int lenth;
-}foodDataInfo, *FoodData;
+#include "setting.h"
+#include "lcd.h"
 
 
-FoodData newFoodData();
+void drawGameScreen(LCD lcd ,ScreenSetting screenSetting);

@@ -38,7 +38,7 @@ typedef struct
 
 }foodInfo,*Food;
 
-Food newFood(Block block);
+Food newFood(Block block,int life);
 
 
 #endif

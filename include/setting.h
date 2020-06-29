@@ -18,14 +18,20 @@
 #define __SETTING_H
 
 #include "ui.h"
+#include "role.h"
 
 typedef struct
 {
-    Block background;
-    Position start;
-    Position end;
+    Block background;//游戏背景
+    PositionRange range;//游戏区域
+    Position position;//屏幕位置
+    int size;//物体大小
+    int row;//行数
+    int col;//列数
+    Food *map;//地图矩阵
+
 }screenSetting,*ScreenSetting;
 
-ScreenSetting newScreenSetting(Block background);
+ScreenSetting newScreenSetting(Block background,Position position,int size);
 
 #endif
