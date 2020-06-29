@@ -93,6 +93,14 @@ typedef struct
 Position newPosition(int x,int y);
 
 
+typedef struct{
+    Position start;
+    Position end;
+}positionRangeInfo,*PositionRange;
+
+PositionRange newPositionRange(Position start,Position end);
+
+
 extern Color red;
 extern Color blue;
 extern Color green;

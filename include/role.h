@@ -22,13 +22,23 @@
 typedef struct
 {
     int length;
+    int speed;
+    Block head;
+    Block body;
+    Position position;
 
 }snakeInfo,*Snake;
+
+Snake newSnake(Block head,Block body,Position position);
 
 typedef struct
 {
     Block block;
+    int life;
+
 }foodInfo,*Food;
+
+Food newFood(Block block);
 
 
 #endif

@@ -82,3 +82,10 @@ Position newPosition(int x,int y){
     p->y = y;
     return p;
 }
+
+PositionRange newPositionRange(Position start,Position end){
+    PositionRange p = (PositionRange)malloc(sizeof(positionRangeInfo));
+    p->start = start;
+    p->end = end;
+    return p;
+}

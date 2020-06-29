@@ -15,6 +15,7 @@
  */
 #include "setting.h"
 #include <stddef.h>
+#include <stdlib.h>
 
 ScreenSetting newScreenSetting(Block background){
     ScreenSetting s = (ScreenSetting)malloc(sizeof(screenSetting));
@@ -23,5 +24,5 @@ ScreenSetting newScreenSetting(Block background){
         s->start = newPosition(background->border->padding->left,background->border->padding->top);
         s->end = newPosition(background->border->padding->left,background->border->padding->top);
     }
-    
+    return s;
 }
