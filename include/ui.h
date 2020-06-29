@@ -85,9 +85,16 @@ typedef struct
 Position newPosition(int x,int y);
 
 
-
-// Color red = 0x00ff0000;
-// Color blue = 0x000000ff;
-// Color green = 0x0000ff00;
+extern Color red;
+extern Color blue;
+extern Color green;
+extern Color yellow;
+extern Color gray;
+extern Color brown;
+extern Color orange;
+extern Color white;
+extern Color black;
+extern Color purple;
+extern Color clear;
 
 #endif

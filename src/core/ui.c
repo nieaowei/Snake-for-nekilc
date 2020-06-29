@@ -24,6 +24,19 @@
 #include "ui.h"
 #include <stdlib.h>
 
+
+Color red = 0x00ff0000;
+Color blue = 0x000000ff;
+Color green = 0x0000ff00;
+Color yellow = 0xFFFFFF00;
+Color gray = 0xFF7F7F7F;
+Color brown = 0xFF996633;
+Color orange = 0xFFFF7F00;
+Color white = 0xFFFFFFFF;
+Color black = 0xFF000000;
+Color purple = 0xFF7F007F;
+Color clear = 0x00000000;
+
 Padding newPadding(px top,px bottom,px left,px right){
     Padding p = (Padding)malloc(sizeof(paddingInfo));
     p->top=top;
