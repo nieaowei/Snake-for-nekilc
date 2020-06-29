@@ -93,10 +93,6 @@ typedef struct
 Position newPosition(int x,int y);
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 7520afd50bebcf1044c412b7a52c739e23ecd476
 extern Color red;
 extern Color blue;
 extern Color green;

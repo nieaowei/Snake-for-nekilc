@@ -34,7 +34,7 @@
 	LCD lcd = newLCD(red,size);
 	// Block SolidBlockEQ = newBlock(NULL,purple,size);
 	// Block SolidBlockNEQ = newBlock(newBorder(SOLID,blue,newPadding(10,30,10,20)),green,size);
-	Block DottedBlockEQ = newBlock(newBorder(newBorderType(DOTTED,10),blue,newPadding(10,10,10,10)),purple,size);
+	Block DottedBlockEQ = newBlock(newBorder(newBorderType(DOTTED,4),blue,newPadding(10,10,10,10)),purple,size);
 	// Block DottedBlockNEQ = newBlock(newBorder(DOTTED,blue,newPadding(10,30,10,10)),green,size);
 	// Block blocks[4]={SolidBlockEQ,SolidBlockNEQ,DottedBlockEQ,DottedBlockNEQ};
 	drawBlock(lcd,newPosition(0,0),DottedBlockEQ);
