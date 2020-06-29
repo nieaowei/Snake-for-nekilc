@@ -24,6 +24,10 @@
 #include "ui.h"
 #include <stdlib.h>
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7520afd50bebcf1044c412b7a52c739e23ecd476
 Color red = 0x00ff0000;
 Color blue = 0x000000ff;
 Color green = 0x0000ff00;
