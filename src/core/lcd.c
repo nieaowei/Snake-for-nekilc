@@ -48,6 +48,8 @@ void drawBlock(LCD lcd,Position position,Block block){
     bool leftFlag = false;
     int right=1;
     int rightCount=__INT32_MAX__;
+    bool rightFlag = false;
+
     for (; start->y < end->y; start->y++)
     {
         if (block->border!=NULL && block->border->type==DOTTED)
@@ -135,18 +137,19 @@ void drawBlock(LCD lcd,Position position,Block block){
                     {
                         if (block->border->type==DOTTED)
                         {
+                            
                             if ((start->y+1)%(block->border->padding->right*right+1)==0)
                             {
-                                right+=2;
-                                rightCount = 1;
+                                rightFlag = true;
+                                rightCount = 0;
                                 drawPoint(lcd,start->x,start->y,block->color);
                                 continue;
-                            }else if (rightCount < block->border->padding->right)
+                            }else if (rightFlag)
                             {
                                 drawPoint(lcd,start->x,start->y,block->color);
                                 continue;
                             }
-                        
+                            
                         }
                         drawPoint(lcd,start->x,start->y,block->border->color);
                         continue;
@@ -164,6 +167,16 @@ void drawBlock(LCD lcd,Position position,Block block){
             {
                 left+=2;        
                 leftFlag=false;
+            }
+            
+        }
+        if (rightFlag)
+        {
+            rightCount++;
+            if (rightCount==block->border->padding->right)
+            {
+                right+=2;        
+                rightFlag=false;
             }
             
         }
