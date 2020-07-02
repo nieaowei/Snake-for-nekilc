@@ -28,35 +28,83 @@
 #include "input.h"
 #include "core.h"
 #include <pthread.h>
+#include "move.h"
 
+void *getInuptKey(LCDInput lcdInput){
+    struct input_event ev;
+    char msg[256];
+    while (1)
+    {
+        int re = read(lcdInput->file_pointer,&ev,sizeof(ev));
+        sprintf(msg,"get key status: %d",re);
+        if (ev.type==EV_KEY)
+        {
+            if (ev.value==1)
+            {
+                sprintf(msg,"key code: %d",ev.code);
+                logD("INPUT","getInuptKey",msg,200);
+                lcdInput->currentKey = ev.code;
+            }
+            
+        }
+    }
+}
+
+void *moveRun(GameSetting gameSetting){
+	while (1)
+	{
+		gameSetting->snake->tailP->x = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x;
+        gameSetting->snake->tailP->y = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y;
+        gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x = gameSetting->snake->headP->x;
+        gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y = gameSetting->snake->headP->y;
+        switch (gameSetting->snake->direction)
+        {
+        case LEFT_TO_RIGHT:
+            
+            gameSetting->snake->headP->y+=1;
+            break;
+        case TOP_TO_BOTTOM:
+            gameSetting->snake->headP->x+=1;
+            break;
+        case RIGHT_TO_LEFT:
+            gameSetting->snake->headP->y-=1;
+            break;
+        case BOTTOM_TO_TOP:
+            gameSetting->snake->headP->x-=1;
+            break;
+        default:
+            break;
+        }
+		usleep(1000*500);
+	}
+	
+		
+}
 
  int main(void)
  {	
 
 	Size size = newSize(800,480);
+	//initialize the screen and set its size.
 	LCD lcd = newLCD(red,size);
-	LCDInput lcdInput = createLCDInput("/dev/input/event2");
+	// Keyboard listener.
+	// the child thread.
+	// lcdInput->currentKey
+	LCDInput lcdInput = createLCDInput("/dev/input/event2",getInuptKey);
+
 	Block DottedBlockEQ = newBlock(newBorder(newBorderType(DOTTED,4),blue,newPadding(10,10,10,10)),purple,size);
 	Block gameScreen = newBlock(newBorder(newBorderType(SOLID,3),red,newPadding(10,10,10,10)),green,newSize(600,450));
-	
-	GameSetting GameSetting = newGameSetting(gameScreen,newPosition(15,15),10);
-
+	// initialize the game setting.
+	GameSetting gameSetting = newGameSetting(gameScreen,newPosition(15,15),10,lcdInput);
+	// initialize the screen backgroud.
 	drawBlock(lcd,newPosition(0,0),DottedBlockEQ);
-	
-	drawGameScreen(lcd,GameSetting);
+	// initialize the game area.
+	drawGameScreen(lcd,gameSetting);
+	// start move thread
+	MoveThread move = createMoveThread(moveRun,gameSetting);
+	// Draw the user interface in the main thread.
+	drawGameMap(lcd,gameSetting);
 
-
-
-	int i = 0;
-
-	while (1)
-	{
-		char msg[256];
-		sprintf(msg,"current key code: %d",lcdInput->currentKey);
-		logD("MAIN","main",msg,200);
-		sleep(1);
-	}
-	
 	return 0;
  }
 

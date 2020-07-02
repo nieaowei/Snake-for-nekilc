@@ -18,11 +18,17 @@
 #include "role.h"
 #include <stdlib.h>
 
-Snake newSnake(Block head,Block body,Position position){
+Snake newSnake(Block head,Block tail,Block body,Position headP){
     Snake s = (Snake)malloc(sizeof(snakeInfo));
     s->head = head;
+    s->tail = tail;
     s->body = body;
-    s->position = position;
+    s->length = 3;
+    s->headP = headP;
+    s->direction = LEFT_TO_RIGHT;
+    s->speed = 1;
+    s->tailP = newPosition(headP->x,headP->y-2);
+    s->bodyP[0] =  newPosition(headP->x,headP->y-1);
     return s;
 }
 

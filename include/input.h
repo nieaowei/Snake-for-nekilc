@@ -1181,10 +1181,10 @@ typedef struct
 }LCDInputInfo,*LCDInput;
 
 //return key code
-void *getInuptKey(void *arg);
+// void *getInuptKey(LCDInput lcdInput);
 
 // create lcd input object.
 // @param addr device address.
-LCDInput createLCDInput(const char *addr);
+LCDInput createLCDInput(const char *addr,void *run(void *arg));
 
 #endif /* _INPUT_H */

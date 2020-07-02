@@ -18,6 +18,21 @@
 #define __ROLE_H
 
 #include "ui.h"
+// #include "move.h"
+
+typedef enum{
+    HEAD = 1,
+    BODY,
+    TAIL
+}SnakePart;
+
+typedef enum{
+    LEFT_TO_RIGHT=0,
+    RIGHT_TO_LEFT,
+    TOP_TO_BOTTOM,
+    BOTTOM_TO_TOP
+}MoveType;
+
 
 typedef struct
 {
@@ -25,11 +40,15 @@ typedef struct
     int speed;
     Block head;
     Block body;
-    Position position;
-
+    Block tail;
+    // Position position;
+    Position headP;
+    Position tailP;
+    Position bodyP[256];
+    MoveType direction;
 }snakeInfo,*Snake;
 
-Snake newSnake(Block head,Block body,Position position);
+Snake newSnake(Block head,Block tail,Block body,Position headP);
 
 typedef struct
 {

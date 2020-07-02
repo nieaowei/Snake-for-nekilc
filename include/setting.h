@@ -19,19 +19,23 @@
 
 #include "ui.h"
 #include "role.h"
+#include "input.h"
 
 typedef struct
 {
     Block background;//游戏背景
     PositionRange range;//游戏区域
     Position position;//屏幕位置
+    Block object;
     int size;//物体大小
     int row;//行数
     int col;//列数
-    Food *map;//地图矩阵
+    int **map;//地图矩阵
+    Snake snake;
+    LCDInput lcdInput;
 
 }gameSettingInfo,*GameSetting;
 
-GameSetting newGameSetting(Block background,Position position,int size);
+GameSetting newGameSetting(Block background,Position position,int size,LCDInput lcdInput);
 
 #endif
