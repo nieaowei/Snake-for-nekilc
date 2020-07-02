@@ -23,12 +23,13 @@ Snake newSnake(Block head,Block tail,Block body,Position headP){
     s->head = head;
     s->tail = tail;
     s->body = body;
-    s->length = 3;
+    s->length = 4;
     s->headP = headP;
     s->direction = LEFT_TO_RIGHT;
     s->speed = 1;
-    s->tailP = newPosition(headP->x,headP->y-2);
+    s->tailP = newPosition(headP->x,headP->y-3);
     s->bodyP[0] =  newPosition(headP->x,headP->y-1);
+    s->bodyP[1] =  newPosition(headP->x,headP->y-2);
     return s;
 }
 

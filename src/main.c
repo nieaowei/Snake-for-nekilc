@@ -53,10 +53,32 @@ void *getInuptKey(LCDInput lcdInput){
 void *moveRun(GameSetting gameSetting){
 	while (1)
 	{
-		gameSetting->snake->tailP->x = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x;
-        gameSetting->snake->tailP->y = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y;
-        gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x = gameSetting->snake->headP->x;
-        gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y = gameSetting->snake->headP->y;
+		// gameSetting->snake->tailP->x = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x;
+        // gameSetting->snake->tailP->y = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y;
+        // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x = gameSetting->snake->headP->x;
+        // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y = gameSetting->snake->headP->y;
+        for (int i = gameSetting->snake->length-2-1; i > -1 ; i--)
+        {
+            // if end
+            if (i==gameSetting->snake->length-2-1)
+            {
+                gameSetting->snake->tailP->x = gameSetting->snake->bodyP[i]->x;
+                gameSetting->snake->tailP->y = gameSetting->snake->bodyP[i]->y;
+                // continue;
+                /* code */
+            }
+            // if first
+            if (i==0)
+            {
+                gameSetting->snake->bodyP[i]->x = gameSetting->snake->headP->x;
+                gameSetting->snake->bodyP[i]->y = gameSetting->snake->headP->y;
+                continue;
+            }
+            gameSetting->snake->bodyP[i]->x = gameSetting->snake->bodyP[i-1]->x;
+            gameSetting->snake->bodyP[i]->y = gameSetting->snake->bodyP[i-1]->y;
+
+        }
+        
         switch (gameSetting->snake->direction)
         {
         case LEFT_TO_RIGHT:
@@ -75,9 +97,10 @@ void *moveRun(GameSetting gameSetting){
         default:
             break;
         }
+       
+        
 		usleep(1000*500);
 	}
-	
 		
 }
 
@@ -91,7 +114,7 @@ void *moveRun(GameSetting gameSetting){
 	// the child thread.
 	// lcdInput->currentKey
 	LCDInput lcdInput = createLCDInput("/dev/input/event2",getInuptKey);
-
+    lcdInput->currentKey = KEY_RIGHT;
 	Block DottedBlockEQ = newBlock(newBorder(newBorderType(DOTTED,4),blue,newPadding(10,10,10,10)),purple,size);
 	Block gameScreen = newBlock(newBorder(newBorderType(SOLID,3),red,newPadding(10,10,10,10)),green,newSize(600,450));
 	// initialize the game setting.

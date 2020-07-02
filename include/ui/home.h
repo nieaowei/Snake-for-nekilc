@@ -19,6 +19,6 @@
 
 #include "lcd.h"
 
-void paintMainUI(LCD lcd);
+
 
 #endif
