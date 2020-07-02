@@ -30,8 +30,8 @@ typedef struct
     int col;//列数
     Food *map;//地图矩阵
 
-}screenSetting,*ScreenSetting;
+}gameSettingInfo,*GameSetting;
 
-ScreenSetting newScreenSetting(Block background,Position position,int size);
+GameSetting newGameSetting(Block background,Position position,int size);
 
 #endif

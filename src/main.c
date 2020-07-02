@@ -25,7 +25,9 @@
 #include <stdio.h>
 #include "home.h"
 #include "game.h"
-
+#include "input.h"
+#include "core.h"
+#include <pthread.h>
 
 
  int main(void)
@@ -33,28 +35,26 @@
 
 	Size size = newSize(800,480);
 	LCD lcd = newLCD(red,size);
-	// Block SolidBlockEQ = newBlock(NULL,purple,size);
-	// Block SolidBlockNEQ = newBlock(newBorder(SOLID,blue,newPadding(10,30,10,20)),green,size);
+	LCDInput lcdInput = createLCDInput("/dev/input/event2");
 	Block DottedBlockEQ = newBlock(newBorder(newBorderType(DOTTED,4),blue,newPadding(10,10,10,10)),purple,size);
-	// Block DottedBlockNEQ = newBlock(newBorder(DOTTED,blue,newPadding(10,30,10,10)),green,size);
-	// Block blocks[4]={SolidBlockEQ,SolidBlockNEQ,DottedBlockEQ,DottedBlockNEQ};
 	Block gameScreen = newBlock(newBorder(newBorderType(SOLID,3),red,newPadding(10,10,10,10)),green,newSize(600,450));
 	
-	ScreenSetting screenSetting = newScreenSetting(gameScreen,newPosition(15,15),10);
-	
+	GameSetting GameSetting = newGameSetting(gameScreen,newPosition(15,15),10);
+
 	drawBlock(lcd,newPosition(0,0),DottedBlockEQ);
 	
-	drawGameScreen(lcd,screenSetting);
-	
-	// paintMainUI(lcd);
+	drawGameScreen(lcd,GameSetting);
+
+
 
 	int i = 0;
 
 	while (1)
 	{
-		// drawBlock(lcd,newPosition(0,0),blocks[i++]);
+		char msg[256];
+		sprintf(msg,"current key code: %d",lcdInput->currentKey);
+		logD("MAIN","main",msg,200);
 		sleep(1);
-		i=i%4;
 	}
 	
 	return 0;

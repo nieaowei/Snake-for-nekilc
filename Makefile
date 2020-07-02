@@ -7,7 +7,7 @@ INCLUDE	:= include
 LIB		:= lib
 OBJ 	:= obj
 
-LIBRARIES	:=
+LIBRARIES	:= pthread
 
 ifeq ($(OS),Windows_NT)
 EXECUTABLE	:= main.exe
@@ -52,7 +52,7 @@ $(OBJDIRS):
 	mkdir -p $@
 
 $(BIN)/$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(CFLAGS) $(CINCLUDES) $(CLIBS) $^ -o $@ $(LIBRARIES)
+	$(CC) $(CFLAGS) $(CINCLUDES) $(CLIBS) $^ -o $@ -l$(LIBRARIES)
 
 $(OBJECTS):$(OBJ)/%.o:$(SRC)/%.c
-	- $(CC) $(CFLAGS) $(CINCLUDES) $(CLIBS) -c -o $@ $< $(LIBRARIES)
+	- $(CC) $(CFLAGS) $(CINCLUDES) $(CLIBS) -c -o $@ $< -l$(LIBRARIES)

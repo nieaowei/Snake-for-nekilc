@@ -17,8 +17,8 @@
 #include <stddef.h>
 #include <stdlib.h>
 
-ScreenSetting newScreenSetting(Block background,Position position,int size){
-    ScreenSetting s = (ScreenSetting)malloc(sizeof(screenSetting));
+GameSetting newGameSetting(Block background,Position position,int size){
+    GameSetting s = (GameSetting)malloc(sizeof(gameSettingInfo));
     //如果没有边框
     Position start = newPosition(position->x,position->y);
     Position end = newPosition(background->size->width+position->x,background->size->height+position->y);
