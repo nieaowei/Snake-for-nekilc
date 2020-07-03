@@ -28,9 +28,13 @@
 #include "input.h"
 #include "core.h"
 #include <pthread.h>
+#include <unistd.h>
+#include "random.h"
 #include "move.h"
+#include <stdlib.h>
 
-void *getInuptKey(LCDInput lcdInput){
+void *getInuptKey(void *arg){
+    LCDInput lcdInput = (LCDInput)arg;
     struct input_event ev;
     char msg[256];
     while (1)
@@ -50,7 +54,10 @@ void *getInuptKey(LCDInput lcdInput){
     }
 }
 
-void *moveRun(GameSetting gameSetting){
+pthread_mutex_t lock;
+
+void *moveRun(void *arg){
+    GameSetting gameSetting = (GameSetting)arg;
 	while (1)
 	{
 		// gameSetting->snake->tailP->x = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x;
@@ -82,30 +89,96 @@ void *moveRun(GameSetting gameSetting){
         switch (gameSetting->snake->direction)
         {
         case LEFT_TO_RIGHT:
-            
+            if (gameSetting->snake->headP->y+1 >= gameSetting->col)
+            {
+                logD("MAIN","*moveRun","game over ,Hit the right wall.",200);
+                exit(0);
+            }
             gameSetting->snake->headP->y+=1;
             break;
         case TOP_TO_BOTTOM:
+            if (gameSetting->snake->headP->x+1 >= gameSetting->row)
+            {
+                logD("MAIN","*moveRun","game over ,Hit the bottom wall.",200);
+                exit(0);
+            }
             gameSetting->snake->headP->x+=1;
             break;
         case RIGHT_TO_LEFT:
+            if (gameSetting->snake->headP->y-1 < 0)
+            {
+                logD("MAIN","*moveRun","game over ,Hit the left wall.",200);
+                exit(0);
+            }
             gameSetting->snake->headP->y-=1;
             break;
         case BOTTOM_TO_TOP:
+            if (gameSetting->snake->headP->x-1 < 0)
+            {
+                logD("MAIN","*moveRun","game over ,Hit the top wall.",200);
+                exit(0);
+            }
             gameSetting->snake->headP->x-=1;
             break;
         default:
             break;
         }
-       
+        switch (gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y])
+        {
+        case FOOD_1:
+            gameSetting->scorce+=food_1->life;
+            break;
+        case FOOD_2:
+            gameSetting->scorce+=food_2->life;
+            break;
+        case FOOD_3:
+            gameSetting->scorce+=food_3->life;
+            break;
+        case FOOD_4:
+            gameSetting->scorce+=food_4->life;
+            break;
+        case FOOD_5:
+            gameSetting->scorce+=food_5->life;
+            break;
+        default:
+            break;
+        }
+        // create food.
+        int x = random_between(0,gameSetting->row);
+        int y = random_between(0,gameSetting->col);
+
+        {
+            free(gameSetting->foods[gameSetting->foodLen]);
+            gameSetting->foods[gameSetting->foodLen] = NULL;
+            gameSetting->foods[gameSetting->foodLen] = newPosition(x,y);
+        }
         
-		usleep(1000*500);
+        if (gameSetting->foodLen+1>=10)
+        {
+            gameSetting->foodLen = 0;
+        }else
+        {
+            gameSetting->foodLen += 1;
+
+        }
+        // pthread_mutex_unlock(&gameSetting->foodMux);
+
+        // pthread_mutex_unlock(&lock);
+        
+        // char msg[200];
+        // sprintf(msg,"current scorce: %d .",gameSetting->scorce);
+
+        // logD("MAIN","*moveRun",msg,200);
+		// usleep(1000*500);
+        // sleep(1);
+        usleep(gameSetting->snake->speed);
 	}
 		
 }
 
  int main(void)
  {	
+    pthread_mutex_init(&lock,NULL);
 
 	Size size = newSize(800,480);
 	//initialize the screen and set its size.
@@ -124,9 +197,15 @@ void *moveRun(GameSetting gameSetting){
 	// initialize the game area.
 	drawGameScreen(lcd,gameSetting);
 	// start move thread
-	MoveThread move = createMoveThread(moveRun,gameSetting);
+	createMoveThread(moveRun,gameSetting);
 	// Draw the user interface in the main thread.
 	drawGameMap(lcd,gameSetting);
+    while (1)
+    {
+        /* code */
+        sleep(1);
+    }
+    
 
 	return 0;
  }

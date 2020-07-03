@@ -18,6 +18,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+extern  Food food_1;
+extern  Food food_2;
+extern  Food food_3;
+extern  Food food_4;
+extern  Food food_5;
+
 GameSetting newGameSetting(Block background,Position position,int size,LCDInput lcdInput){
     GameSetting s = (GameSetting)malloc(sizeof(gameSettingInfo));
     //如果没有边框
@@ -49,6 +55,17 @@ GameSetting newGameSetting(Block background,Position position,int size,LCDInput 
     }
 
     s->snake = newSnake(newBlock(NULL,orange,newSize(size,size)),newBlock(NULL,blue,newSize(size,size)),newBlock(NULL,yellow,newSize(size,size)),newPosition(s->row/2,s->col/2));
-    
+
+    pthread_mutex_init(&s->foodMux,NULL);
+
+    s->scorce = 0;
+
+
+    food_1 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),white,newSize(size,size)),1);
+    food_2 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),orange,newSize(size,size)),2);
+    food_3 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),yellow,newSize(size,size)),3);
+    food_4 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),purple,newSize(size,size)),4);
+    food_5 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),black,newSize(size,size)),5);
+
     return s;
 }

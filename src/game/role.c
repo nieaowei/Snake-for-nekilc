@@ -18,6 +18,8 @@
 #include "role.h"
 #include <stdlib.h>
 
+
+
 Snake newSnake(Block head,Block tail,Block body,Position headP){
     Snake s = (Snake)malloc(sizeof(snakeInfo));
     s->head = head;
@@ -26,7 +28,7 @@ Snake newSnake(Block head,Block tail,Block body,Position headP){
     s->length = 4;
     s->headP = headP;
     s->direction = LEFT_TO_RIGHT;
-    s->speed = 1;
+    s->speed = 1000*1000;
     s->tailP = newPosition(headP->x,headP->y-3);
     s->bodyP[0] =  newPosition(headP->x,headP->y-1);
     s->bodyP[1] =  newPosition(headP->x,headP->y-2);
@@ -39,3 +41,12 @@ Food newFood(Block block,int life){
     f->life = life;
     return f;
 }
+
+
+// extern const Food food_1;
+// extern const Food food_2;
+// extern const Food food_3;
+// extern const Food food_4;
+// extern const Food food_5;
+
+

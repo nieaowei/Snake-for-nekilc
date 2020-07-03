@@ -27,6 +27,14 @@ typedef enum{
 }SnakePart;
 
 typedef enum{
+    FOOD_1=4,
+    FOOD_2,
+    FOOD_3,
+    FOOD_4,
+    FOOD_5,
+}FoodType;
+
+typedef enum{
     LEFT_TO_RIGHT=0,
     RIGHT_TO_LEFT,
     TOP_TO_BOTTOM,
@@ -37,7 +45,7 @@ typedef enum{
 typedef struct
 {
     int length;
-    int speed;
+    long speed;
     Block head;
     Block body;
     Block tail;
@@ -56,6 +64,12 @@ typedef struct
     int life;
 
 }foodInfo,*Food;
+
+ Food food_1;
+ Food food_2;
+ Food food_3;
+ Food food_4;
+ Food food_5;
 
 Food newFood(Block block,int life);
 

@@ -1185,6 +1185,6 @@ typedef struct
 
 // create lcd input object.
 // @param addr device address.
-LCDInput createLCDInput(const char *addr,void *run(void *arg));
+LCDInput createLCDInput(const char *addr,void *(*run)(void *));
 
 #endif /* _INPUT_H */

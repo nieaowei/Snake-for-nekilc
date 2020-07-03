@@ -13,7 +13,7 @@
 
 
 
-LCDInput createLCDInput(const char *addr,void *run(void *arg)){
+LCDInput createLCDInput(const char *addr,void *(*run)(void *)){
     LCDInput l = (LCDInput)malloc(sizeof(LCDInputInfo));
     char msg[256];
     l->file_pointer = open(addr,O_RDONLY);
