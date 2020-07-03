@@ -39,6 +39,7 @@ typedef struct
     int foodsIsFull;
     int foodKinds[10];
     LCDInput lcdInput;
+    int pause;
 
 }gameSettingInfo,*GameSetting;
 

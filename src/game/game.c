@@ -41,36 +41,41 @@ void drawGameMap(LCD lcd,GameSetting gameSetting){
     Position h = newPosition(0,0);
     do 
     {
+        if (gameSetting->pause==0)
+        {
+            
+        
+
         if (former!=NULL)
         {
             gameSetting->map[former->x][former->y] = 0;
             free(former);
             former = NULL;
         }
+        // printf("head and tail flag.\n");
         gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y]=HEAD;
         gameSetting->map[gameSetting->snake->tailP->x][gameSetting->snake->tailP->y]=TAIL;
         //avoid competition
         int length = gameSetting->snake->length;
         for (int i = 0; i < length-2; i++)
         {
-            // sprintf(msg,"body: %d,",i);
+            // sprintf(msg,"body: %d,(%d,%d)",i,gameSetting->snake->bodyP[i]->x,gameSetting->snake->bodyP[i]->y);
             // logD("GAME","drawGameMap",msg,200);
             gameSetting->map[gameSetting->snake->bodyP[i]->x][gameSetting->snake->bodyP[i]->y]=BODY;
         }
         //avoid competition
         pthread_mutex_lock(&gameSetting->foodMux);
 
-        int tempFoodLen = gameSetting->foodLen;
-        if (gameSetting->foodsIsFull)
-        {
-            /* code */
-            tempFoodLen = 10;
-        }
-        // printf("%d\n",tempFoodLen);
+        int tempFoodLen = 10;
+        // if (gameSetting->foodsIsFull == 1)
+        // {
+        //     /* code */
+        //     tempFoodLen = 10;
+        // }
+        // printf("tempFoodLen %d\n",tempFoodLen);s
         
         for (int i = 0; i < tempFoodLen; i++)
         {
-            // int kind = random_between(1,5);
             // sprintf(msg,"food: %d,%d,%d",i,gameSetting->foods[i]->x,gameSetting->foods[i]->y);
             // logD("GAME","drawGameMap",msg,200);
             // printf("%d,%d\n",gameSetting->foods[i]->x,gameSetting->foods[i]->y);
@@ -102,7 +107,7 @@ void drawGameMap(LCD lcd,GameSetting gameSetting){
             
 
         }
-            pthread_mutex_unlock(&gameSetting->foodMux);
+        pthread_mutex_unlock(&gameSetting->foodMux);
 
         
         for (int i = 0; i < gameSetting->row; i++)
@@ -155,6 +160,7 @@ void drawGameMap(LCD lcd,GameSetting gameSetting){
             }
             
         }
+        }
         switch (gameSetting->lcdInput->currentKey)
         {
         case KEY_DOWN:
@@ -190,6 +196,16 @@ void drawGameMap(LCD lcd,GameSetting gameSetting){
             break;
         case KEY_Q:
             exit(0);
+            break;
+        case KEY_P:
+            if (gameSetting->pause == 1)
+            {
+                gameSetting->pause  =   0;
+            }else
+            {
+                gameSetting->pause = 1;
+            }
+            gameSetting->lcdInput->currentKey=-1;
             break;
         default:
             break;

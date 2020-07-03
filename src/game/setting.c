@@ -62,6 +62,13 @@ GameSetting newGameSetting(Block background,Position position,int size,LCDInput 
     s->scorce = 0;
     s->foodLen = 0;
 
+    for (int i = 0; i < 10; i++)
+    {
+        s->foods[i]=newPosition(-1,-1);
+        s->foodKinds[i]=0;
+    }
+    
+    s->pause = 0;
 
     food_1 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),white,newSize(size,size)),1);
     food_2 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),orange,newSize(size,size)),2);

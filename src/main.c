@@ -34,29 +34,28 @@
 #include <stdlib.h>
 
 void setFoodFrom(GameSetting g,int x,int y){
-    // int len = g->foodLen;
+    int len = 10;
     // printf("f len :%d \n",len);
     // if (g->foodsIsFull)
     // {
     //     len = 10;
     // }
-    // printf(" len :%d \n",len);
+    printf(" len :%d \n",len);
     
-    // for (int i = 0; i < len; i++)
-    // {
-    //     if (g->foods[i]!=NULL)
-    //     {
-    //         if (g->foods[i]->x ==x && g->foods[i]->y==y)
-    //         {
-    //             printf("eat kill\n");
-    //             g->foods[i]->x=-1;
-    //             g->foods[i]->y=-1;
-    //             g->foodKinds[i] = 0;
-    //             break;
-    //         }
-    //     }
+    for (int i = 0; i < len; i++)
+    {
+        if (g->foods[i]!=NULL)
+        {
+            if (g->foods[i]->x ==x && g->foods[i]->y==y)
+            {
+                printf("eat kill %d \n",i);
+                g->foods[i]->x=-1;
+                g->foods[i]->y=-1;
+                break;
+            }
+        }
         
-    // }
+    }
     
 }
 
@@ -88,10 +87,13 @@ void *moveRun(void *arg){
     int addFlag=0;
 	while (1)
 	{
-		// gameSetting->snake->tailP->x = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x;
-        // gameSetting->snake->tailP->y = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y;
-        // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x = gameSetting->snake->headP->x;
-        // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y = gameSetting->snake->headP->y;
+         if (gameSetting->pause == 1)
+        {
+            printf("moveRun pause ...\n");
+            usleep(gameSetting->snake->speed-gameSetting->scorce*50);
+            continue;
+        }
+
         if (addFlag)
         {
             gameSetting->snake->length++;
@@ -218,35 +220,19 @@ void *moveRun(void *arg){
             gameSetting->scorce+=food_5->life;
             break;
         default:
+            // gameSetting->scorce+=4;
             break;
         }
 
         if (gameSetting->scorce/5 - gameSetting->snake->length + 4 > 0)
         {
-            // if ((gameSetting->scorce - tempS)>=5)
-            // {
-                // gameSetting->snake->length++;
-                // gameSetting->snake->bodyP[gameSetting->snake->length-2-1] = newPosition(gameSetting->snake->tailP->x,gameSetting->snake->tailP->y);
-                // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x=gameSetting->snake->tailP->x;
-                // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y=gameSetting->snake->tailP->y;
-                addFlag=1;
-            // }
-            
+            addFlag=1;
         }
-        
-
-        
-
-        // pthread_mutex_unlock(&gameSetting->foodMux);
-
-        // pthread_mutex_unlock(&lock);
         
         char msg[200];
         sprintf(msg,"current scorce: %d .",gameSetting->scorce);
 
         // logD("MAIN","*moveRun",msg,200);
-		// usleep(1000*500);
-        // sleep(1);
         usleep(gameSetting->snake->speed-gameSetting->scorce*50);
 	}
 		
@@ -255,40 +241,63 @@ void *moveRun(void *arg){
 void *updatedFood(GameSetting gameSetting){
     while (1)
     {
+        if (gameSetting->pause==1)
+        {
+            printf("updateFood pause ...\n");
+            usleep(gameSetting->snake->speed*10);
+            continue;
+        }
+        
         // create food.
         int x = random_between(0,gameSetting->row-1);
         int y = random_between(0,gameSetting->col-1);
-        if (gameSetting->map[x][y]==0)
+        
+        // printf("food %d,%d\n",x,y);
+
+        // if location no food or snake part .
+        if (gameSetting->map[x][y] == 0)
         {   
-            int kind = random_between(1,5);
+            int kind = random_between(1,5);//random kind.
             pthread_mutex_lock(&gameSetting->foodMux);
+            //avoid competition.
             int tempLen = gameSetting->foodLen;
-            if (gameSetting->foods[tempLen]!=NULL)
+            // cross-border control.
+            if (tempLen<10)
             {
-                /* code */
-                 gameSetting->map[gameSetting->foods[tempLen]->x][gameSetting->foods[tempLen]->y]=0;
-                // free(gameSetting->foods[tempLen]);
+                for (int m = 0; m < 10; m++)
+                {
+                    printf("--- %d,%d,%d \n",gameSetting->foods[m]->x,gameSetting->foods[m]->y,m);
+                }
+                
+                // printf(" - food %d,%d,%d\n",x,y,tempLen);
+                //clear former food in the map.
+                if (gameSetting->foods[tempLen]->x >= 0 && gameSetting->foods[tempLen]->y >= 0  )
+                {
+                    gameSetting->map[gameSetting->foods[tempLen]->x][gameSetting->foods[tempLen]->y]=0;
+                }
+                
+
                 gameSetting->foods[tempLen]->x = x;
                 gameSetting->foods[tempLen]->y = y;
-            }else
-            {
-                gameSetting->foods[tempLen] = newPosition(x,y);
-            }
-            gameSetting->foodKinds[tempLen] = kind;
-            
-            if (gameSetting->foodLen+1 >= 10 && gameSetting->foodsIsFull == 0)
-            {
-                gameSetting->foodsIsFull = 1;
-                gameSetting->foodLen = 0;
-            }else
-            {
+                gameSetting->foodKinds[tempLen] = kind;
+                // if length beyond max 10.
                 gameSetting->foodLen += 1;
+                gameSetting->foodLen = gameSetting->foodLen % 10;
+
+                // if (gameSetting->foodLen+1 >= 10)
+                // {
+                //     gameSetting->foodsIsFull = 1;
+                //     gameSetting->foodLen = 0;
+                // }else
+                // {
+                //     gameSetting->foodLen += 1;
+                // }
 
             }
+            
+
             pthread_mutex_unlock(&gameSetting->foodMux);
         }
-        
-
         
         usleep(gameSetting->snake->speed*10);
     }
@@ -305,7 +314,7 @@ void *updatedFood(GameSetting gameSetting){
 	// Keyboard listener.
 	// the child thread.
 	// lcdInput->currentKey
-	LCDInput lcdInput = createLCDInput("/dev/input/event2",getInuptKey);
+	LCDInput lcdInput = createLCDInput("/dev/input/event1",getInuptKey);
     lcdInput->currentKey = KEY_RIGHT;
 	Block DottedBlockEQ = newBlock(newBorder(newBorderType(DOTTED,4),blue,newPadding(10,10,10,10)),purple,size);
 	Block gameScreen = newBlock(newBorder(newBorderType(SOLID,3),red,newPadding(10,10,10,10)),green,newSize(600,450));
