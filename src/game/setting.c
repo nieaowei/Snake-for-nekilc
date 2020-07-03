@@ -54,11 +54,13 @@ GameSetting newGameSetting(Block background,Position position,int size,LCDInput 
         s->map[temp] = (int*)malloc(sizeof(int)*s->col);
     }
 
-    s->snake = newSnake(newBlock(NULL,orange,newSize(size,size)),newBlock(NULL,blue,newSize(size,size)),newBlock(NULL,yellow,newSize(size,size)),newPosition(s->row/2,s->col/2));
+    s->snake = newSnake(newBlock(NULL,orange,newSize(size,size)),newBlock(NULL,blue,newSize(size,size)),newBlock(newBorder(newBorderType(SOLID,0),orange,newPadding(1,1,1,1)),yellow,newSize(size,size)),newPosition(s->row/2,s->col/2));
 
     pthread_mutex_init(&s->foodMux,NULL);
 
+    s->foodsIsFull=0;
     s->scorce = 0;
+    s->foodLen = 0;
 
 
     food_1 = newFood(newBlock(newBorder(newBorderType(SOLID,0),red,newPadding(2,2,2,2)),white,newSize(size,size)),1);

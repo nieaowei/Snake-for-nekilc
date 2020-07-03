@@ -32,10 +32,12 @@ typedef struct
     int col;//列数
     int **map;//地图矩阵
     Snake snake;
+    int scorce;
     int foodLen;
     pthread_mutex_t foodMux;
-    int scorce;
     Position foods[10];//max food number.foremer will be covered.
+    int foodsIsFull;
+    int foodKinds[10];
     LCDInput lcdInput;
 
 }gameSettingInfo,*GameSetting;

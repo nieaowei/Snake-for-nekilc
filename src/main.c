@@ -33,6 +33,33 @@
 #include "move.h"
 #include <stdlib.h>
 
+void setFoodFrom(GameSetting g,int x,int y){
+    // int len = g->foodLen;
+    // printf("f len :%d \n",len);
+    // if (g->foodsIsFull)
+    // {
+    //     len = 10;
+    // }
+    // printf(" len :%d \n",len);
+    
+    // for (int i = 0; i < len; i++)
+    // {
+    //     if (g->foods[i]!=NULL)
+    //     {
+    //         if (g->foods[i]->x ==x && g->foods[i]->y==y)
+    //         {
+    //             printf("eat kill\n");
+    //             g->foods[i]->x=-1;
+    //             g->foods[i]->y=-1;
+    //             g->foodKinds[i] = 0;
+    //             break;
+    //         }
+    //     }
+        
+    // }
+    
+}
+
 void *getInuptKey(void *arg){
     LCDInput lcdInput = (LCDInput)arg;
     struct input_event ev;
@@ -58,12 +85,20 @@ pthread_mutex_t lock;
 
 void *moveRun(void *arg){
     GameSetting gameSetting = (GameSetting)arg;
+    int addFlag=0;
 	while (1)
 	{
 		// gameSetting->snake->tailP->x = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x;
         // gameSetting->snake->tailP->y = gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y;
         // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x = gameSetting->snake->headP->x;
         // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y = gameSetting->snake->headP->y;
+        if (addFlag)
+        {
+            gameSetting->snake->length++;
+            gameSetting->snake->bodyP[gameSetting->snake->length-2-1] = newPosition(gameSetting->snake->tailP->x,gameSetting->snake->tailP->y);
+            addFlag = 0;
+        }
+        
         for (int i = gameSetting->snake->length-2-1; i > -1 ; i--)
         {
             // if end
@@ -85,7 +120,7 @@ void *moveRun(void *arg){
             gameSetting->snake->bodyP[i]->y = gameSetting->snake->bodyP[i-1]->y;
 
         }
-        
+        int flag;
         switch (gameSetting->snake->direction)
         {
         case LEFT_TO_RIGHT:
@@ -94,6 +129,13 @@ void *moveRun(void *arg){
                 logD("MAIN","*moveRun","game over ,Hit the right wall.",200);
                 exit(0);
             }
+            flag = gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y+1];
+            if (flag==BODY || flag==TAIL)
+            {
+                logD("MAIN","*moveRun","game over ,head hit the tail or body.",200);
+                exit(0);
+            }
+            
             gameSetting->snake->headP->y+=1;
             break;
         case TOP_TO_BOTTOM:
@@ -102,12 +144,25 @@ void *moveRun(void *arg){
                 logD("MAIN","*moveRun","game over ,Hit the bottom wall.",200);
                 exit(0);
             }
+            flag = gameSetting->map[gameSetting->snake->headP->x+1][gameSetting->snake->headP->y];
+            if (flag==BODY || flag==TAIL)
+            {
+                logD("MAIN","*moveRun","game over ,head hit the tail or body.",200);
+                exit(0);
+            }
+
             gameSetting->snake->headP->x+=1;
             break;
         case RIGHT_TO_LEFT:
             if (gameSetting->snake->headP->y-1 < 0)
             {
                 logD("MAIN","*moveRun","game over ,Hit the left wall.",200);
+                exit(0);
+            }
+            flag = gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y-1];
+            if (flag==BODY || flag==TAIL)
+            {
+                logD("MAIN","*moveRun","game over ,head hit the tail or body.",200);
                 exit(0);
             }
             gameSetting->snake->headP->y-=1;
@@ -118,62 +173,126 @@ void *moveRun(void *arg){
                 logD("MAIN","*moveRun","game over ,Hit the top wall.",200);
                 exit(0);
             }
+            flag = gameSetting->map[gameSetting->snake->headP->x-1][gameSetting->snake->headP->y];
+            if (flag==BODY || flag==TAIL)
+            {
+                logD("MAIN","*moveRun","game over ,head hit the tail or body.",200);
+                exit(0);
+            }
             gameSetting->snake->headP->x-=1;
             break;
         default:
+            flag = 0;
             break;
         }
+        int tempS = gameSetting->scorce;
         switch (gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y])
         {
         case FOOD_1:
+            gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y]=0;
+            setFoodFrom(gameSetting,gameSetting->snake->headP->x,gameSetting->snake->headP->y);
             gameSetting->scorce+=food_1->life;
             break;
         case FOOD_2:
+            gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y]=0;
+            setFoodFrom(gameSetting,gameSetting->snake->headP->x,gameSetting->snake->headP->y);
+
             gameSetting->scorce+=food_2->life;
             break;
         case FOOD_3:
+            gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y]=0;
+            setFoodFrom(gameSetting,gameSetting->snake->headP->x,gameSetting->snake->headP->y);
+
             gameSetting->scorce+=food_3->life;
             break;
         case FOOD_4:
+            gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y]=0;
+            setFoodFrom(gameSetting,gameSetting->snake->headP->x,gameSetting->snake->headP->y);
+
             gameSetting->scorce+=food_4->life;
             break;
         case FOOD_5:
+            gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y]=0;
+            setFoodFrom(gameSetting,gameSetting->snake->headP->x,gameSetting->snake->headP->y);
+
             gameSetting->scorce+=food_5->life;
             break;
         default:
             break;
         }
-        // create food.
-        int x = random_between(0,gameSetting->row);
-        int y = random_between(0,gameSetting->col);
 
+        if (gameSetting->scorce/5 - gameSetting->snake->length + 4 > 0)
         {
-            free(gameSetting->foods[gameSetting->foodLen]);
-            gameSetting->foods[gameSetting->foodLen] = NULL;
-            gameSetting->foods[gameSetting->foodLen] = newPosition(x,y);
+            // if ((gameSetting->scorce - tempS)>=5)
+            // {
+                // gameSetting->snake->length++;
+                // gameSetting->snake->bodyP[gameSetting->snake->length-2-1] = newPosition(gameSetting->snake->tailP->x,gameSetting->snake->tailP->y);
+                // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->x=gameSetting->snake->tailP->x;
+                // gameSetting->snake->bodyP[gameSetting->snake->length-2-1]->y=gameSetting->snake->tailP->y;
+                addFlag=1;
+            // }
+            
         }
         
-        if (gameSetting->foodLen+1>=10)
-        {
-            gameSetting->foodLen = 0;
-        }else
-        {
-            gameSetting->foodLen += 1;
 
-        }
+        
+
         // pthread_mutex_unlock(&gameSetting->foodMux);
 
         // pthread_mutex_unlock(&lock);
         
-        // char msg[200];
-        // sprintf(msg,"current scorce: %d .",gameSetting->scorce);
+        char msg[200];
+        sprintf(msg,"current scorce: %d .",gameSetting->scorce);
 
         // logD("MAIN","*moveRun",msg,200);
 		// usleep(1000*500);
         // sleep(1);
-        usleep(gameSetting->snake->speed);
+        usleep(gameSetting->snake->speed-gameSetting->scorce*50);
 	}
 		
+}
+
+void *updatedFood(GameSetting gameSetting){
+    while (1)
+    {
+        // create food.
+        int x = random_between(0,gameSetting->row-1);
+        int y = random_between(0,gameSetting->col-1);
+        if (gameSetting->map[x][y]==0)
+        {   
+            int kind = random_between(1,5);
+            pthread_mutex_lock(&gameSetting->foodMux);
+            int tempLen = gameSetting->foodLen;
+            if (gameSetting->foods[tempLen]!=NULL)
+            {
+                /* code */
+                 gameSetting->map[gameSetting->foods[tempLen]->x][gameSetting->foods[tempLen]->y]=0;
+                // free(gameSetting->foods[tempLen]);
+                gameSetting->foods[tempLen]->x = x;
+                gameSetting->foods[tempLen]->y = y;
+            }else
+            {
+                gameSetting->foods[tempLen] = newPosition(x,y);
+            }
+            gameSetting->foodKinds[tempLen] = kind;
+            
+            if (gameSetting->foodLen+1 >= 10 && gameSetting->foodsIsFull == 0)
+            {
+                gameSetting->foodsIsFull = 1;
+                gameSetting->foodLen = 0;
+            }else
+            {
+                gameSetting->foodLen += 1;
+
+            }
+            pthread_mutex_unlock(&gameSetting->foodMux);
+        }
+        
+
+        
+        usleep(gameSetting->snake->speed*10);
+    }
+    
 }
 
  int main(void)
@@ -198,6 +317,9 @@ void *moveRun(void *arg){
 	drawGameScreen(lcd,gameSetting);
 	// start move thread
 	createMoveThread(moveRun,gameSetting);
+    // food 
+    pthread_t foodId;
+    pthread_create(&foodId,NULL,updatedFood,gameSetting);
 	// Draw the user interface in the main thread.
 	drawGameMap(lcd,gameSetting);
     while (1)

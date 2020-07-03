@@ -28,7 +28,7 @@ Snake newSnake(Block head,Block tail,Block body,Position headP){
     s->length = 4;
     s->headP = headP;
     s->direction = LEFT_TO_RIGHT;
-    s->speed = 1000*1000;
+    s->speed = 1000*500;
     s->tailP = newPosition(headP->x,headP->y-3);
     s->bodyP[0] =  newPosition(headP->x,headP->y-1);
     s->bodyP[1] =  newPosition(headP->x,headP->y-2);

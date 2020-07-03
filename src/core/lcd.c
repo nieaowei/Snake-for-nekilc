@@ -55,10 +55,10 @@ void drawBlock(LCD lcd,Position position,Block block){
 
     // memset(msg,0,256);
 
-    sprintf(msg,"end Position(%d,%d),LCD->size(%d,%d),BlockSize(%d,%d)",end->x,end->y,lcd->size->width,lcd->size->height,block->size->width,block->size->height);
+    // sprintf(msg,"end Position(%d,%d),LCD->size(%d,%d),BlockSize(%d,%d)",end->x,end->y,lcd->size->width,lcd->size->height,block->size->width,block->size->height);
     // logD("LCD","drawBlock",msg,200);
 
-    if (end->x> lcd->size->width || end->y > lcd->size->height)
+    if (end->x> lcd->size->width || end->y > lcd->size->height || start->x <0 || start->y<0)
     {
         sprintf(msg,"faild,cause by size beyond lcd size. end Position(%d,%d),LCD->size(%d,%d)",end->x,end->y,lcd->size->width,lcd->size->height);
         logD("LCD","drawBlock",msg,400);
@@ -199,7 +199,10 @@ void drawBlock(LCD lcd,Position position,Block block){
         
 
     }
-    
+    free(start);
+    free(end);
+    start =NULL;
+    end =NULL;
 }
 
 LCD newLCD(Color color,Size size){

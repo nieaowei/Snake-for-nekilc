@@ -38,102 +38,119 @@ void drawGameMap(LCD lcd,GameSetting gameSetting){
     Border leftBorder = newBorder(newBorderType(DOTTED,3),white,newPadding(0,0,2,0));
     Border rightBorder = newBorder(newBorderType(DOTTED,3),white,newPadding(0,0,0,2));
     Position former = NULL;
+    Position h = newPosition(0,0);
     do 
     {
         if (former!=NULL)
         {
             gameSetting->map[former->x][former->y] = 0;
-            // drawBlock(lcd,former,gameSetting->snake->head);
-            // sprintf(msg,"foremer(%d,%d)",former->x,former->y);
-            // logD("GAME","drawGameMap",msg,200);
             free(former);
             former = NULL;
         }
         gameSetting->map[gameSetting->snake->headP->x][gameSetting->snake->headP->y]=HEAD;
         gameSetting->map[gameSetting->snake->tailP->x][gameSetting->snake->tailP->y]=TAIL;
-        
-        for (int i = 0; i < gameSetting->snake->length-2; i++)
+        //avoid competition
+        int length = gameSetting->snake->length;
+        for (int i = 0; i < length-2; i++)
         {
+            // sprintf(msg,"body: %d,",i);
+            // logD("GAME","drawGameMap",msg,200);
             gameSetting->map[gameSetting->snake->bodyP[i]->x][gameSetting->snake->bodyP[i]->y]=BODY;
-            
         }
-        int tempFoodLen = gameSetting->foodLen;
+        //avoid competition
+        pthread_mutex_lock(&gameSetting->foodMux);
 
+        int tempFoodLen = gameSetting->foodLen;
+        if (gameSetting->foodsIsFull)
+        {
+            /* code */
+            tempFoodLen = 10;
+        }
+        // printf("%d\n",tempFoodLen);
+        
         for (int i = 0; i < tempFoodLen; i++)
         {
-            int kind = random_between(1,5);
-            switch (kind)
+            // int kind = random_between(1,5);
+            // sprintf(msg,"food: %d,%d,%d",i,gameSetting->foods[i]->x,gameSetting->foods[i]->y);
+            // logD("GAME","drawGameMap",msg,200);
+            // printf("%d,%d\n",gameSetting->foods[i]->x,gameSetting->foods[i]->y);
+            if (gameSetting->foods[i]->x >=0 && gameSetting->foods[i]->y >=0)
             {
-            case 1:
-                gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_1;
-                break;
-            case 2:
-                gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_2;
-                break;
-            case 3:
-                gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_3;
-                break;
-            case 4:
-                gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_4;
-                break;
-            case 5:
-                gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_5;
-                break;
-            default:
-                break;
+                switch (gameSetting->foodKinds[i])
+                {
+                case 1:
+                    gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_1;
+                    break;
+                case 2:
+                    gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_2;
+                    break;
+                case 3:
+                    gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_3;
+                    break;
+                case 4:
+                    gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_4;
+                    break;
+                case 5:
+                    gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = FOOD_5;
+                    break;
+                default:
+                    gameSetting->map[gameSetting->foods[i]->x][gameSetting->foods[i]->y] = 0;;
+                    break;
+                }
             }
+            
+            
+
         }
+            pthread_mutex_unlock(&gameSetting->foodMux);
+
         
         for (int i = 0; i < gameSetting->row; i++)
         {
             for (int j = 0; j < gameSetting->col; j++)
             {
-                Position h  =   NULL;
+                // Position h  =   NULL;
+                h->x = j * gameSetting->size + gameSetting->range->start->x;
+                h->y = i * gameSetting->size + gameSetting->range->start->x;
+                // sprintf(msg,"map : (%d,%d)",h->x,h->y);
+                // logD("GAME","drawGameMap",msg,200);
                 switch (gameSetting->map[i][j])
                 {
                 case HEAD:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
+                    
                     drawBlock(lcd,h,gameSetting->snake->head);
                     break;
                 case TAIL:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,gameSetting->snake->tail);
                     former = newPosition(i,j);
                     break;
                 case BODY:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,gameSetting->snake->body);
                     break;
                 case FOOD_1:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,food_1->block);
                     break;
                 case FOOD_2:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,food_2->block);
                     break;
                 case FOOD_3:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,food_3->block);
                     break;
                 case FOOD_4:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,food_4->block);
                     break;
                 case FOOD_5:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,food_5->block);
                     break;
                 default:
-                    h = newPosition(j * gameSetting->size + gameSetting->range->start->x,i * gameSetting->size + gameSetting->range->start->x);
                     drawBlock(lcd,h,gameSetting->object);
                     break;
                 }
                 // if (h!=NULL)
-                {
-                    free(h);
-                    h=NULL;
-                }
+                // {
+                //     free(h);
+                //     h=NULL;
+                // }
                 
             }
             
