@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 Color red = 0x00ff0000;
-Color blue = 0x000000ff;
+Color blue = 0x00060093;
 Color green = 0x0000ff00;
 Color yellow = 0xFFFFFF00;
 Color gray = 0xFF7F7F7F;

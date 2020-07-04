@@ -264,10 +264,10 @@ void *updatedFood(GameSetting gameSetting){
             // cross-border control.
             if (tempLen<10)
             {
-                for (int m = 0; m < 10; m++)
-                {
-                    printf("--- %d,%d,%d \n",gameSetting->foods[m]->x,gameSetting->foods[m]->y,m);
-                }
+                // for (int m = 0; m < 10; m++)
+                // {
+                //     printf("--- %d,%d,%d \n",gameSetting->foods[m]->x,gameSetting->foods[m]->y,m);
+                // }
                 
                 // printf(" - food %d,%d,%d\n",x,y,tempLen);
                 //clear former food in the map.
