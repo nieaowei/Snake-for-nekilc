@@ -10,7 +10,7 @@ insmod:all
 	- $(shell insmod mmp_drv.ko)
 
 clean:
-	rm *.o *.ko *.mod.c test
+	rm *.o *.ko *.mod.c test a.out
 
 $(EXEC):mmp_test.c
 	gcc $< -o $@

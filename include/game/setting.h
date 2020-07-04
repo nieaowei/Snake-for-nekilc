@@ -26,7 +26,7 @@ typedef struct
     Block background;//游戏背景
     PositionRange range;//游戏区域
     Position position;//屏幕位置
-    Block object;
+    Block object;//
     int size;//物体大小
     int row;//行数
     int col;//列数

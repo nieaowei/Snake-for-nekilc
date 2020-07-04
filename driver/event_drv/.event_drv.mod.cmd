@@ -1,0 +1,1 @@
+cmd_/home/nieaowei/Desktop/Snake-for-nekilc/driver/event_drv/event_drv.mod := { echo  /home/nieaowei/Desktop/Snake-for-nekilc/driver/event_drv/event_drv.o; echo; } > /home/nieaowei/Desktop/Snake-for-nekilc/driver/event_drv/event_drv.mod

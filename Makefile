@@ -36,7 +36,7 @@ all:  clean $(OBJDIRS) $(BIN)/$(EXECUTABLE)
 .PHONY: clean
 
 driver:
-	make all -C driver
+	- make all -C driver
 
 test:
 	- @echo '$(SOURCES)'

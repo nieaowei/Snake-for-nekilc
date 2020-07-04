@@ -1,2 +1,2 @@
-/home/nieaowei/Desktop/vir/event_drv/event_drv.o
+/home/nieaowei/Desktop/Snake-for-nekilc/driver/event_drv/event_drv.o
 

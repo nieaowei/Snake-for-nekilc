@@ -1,2 +1,2 @@
-/home/nieaowei/Desktop/vir/mmap_drv/mmp_drv.o
+/home/nieaowei/Desktop/Snake-for-nekilc/driver/mmap_drv/mmp_drv.o
 

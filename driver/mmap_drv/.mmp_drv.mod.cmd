@@ -1,0 +1,1 @@
+cmd_/home/nieaowei/Desktop/Snake-for-nekilc/driver/mmap_drv/mmp_drv.mod := { echo  /home/nieaowei/Desktop/Snake-for-nekilc/driver/mmap_drv/mmp_drv.o; echo; } > /home/nieaowei/Desktop/Snake-for-nekilc/driver/mmap_drv/mmp_drv.mod
